@@ -1241,7 +1241,7 @@ function SupportPage() {
         <div className="support-grid">
           <div className="support-card">
             <h3>📧 Email Support</h3>
-            <p>Send an email for non-urgent issues, feature requests, or documentation questions. Typically replied to within 24 hours.</p>
+            <p>Send an email for non-urgent  issues, feature requests, or documentation questions. Typically replied to within 24 hours.</p>
             <div className="contact-row">
               <span>✉️</span>
               <div>
