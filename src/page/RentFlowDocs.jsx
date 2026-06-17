@@ -1,4 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import {
+  VizArchitecture, VizRolesSplit, VizDashboard, VizProperties, VizTenantsAdmin,
+  VizPaymentFlow, VizMaintenanceAdmin, VizAnnouncements, VizMessagesAdmin, VizSettings,
+  VizTenantDashboard, VizPayRentFlow, VizTenantMaintenance, VizTenantMessages, VizTenantProfile,
+  VizOnboardLandlord, VizOnboardTenant, VizOnboardDeveloper,
+} from "./DocVisuals";
 
 // ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
 const css = `
@@ -51,7 +57,7 @@ const css = `
     color: #a78bfa; font-size: 12px; font-weight: 600;
     padding: 5px 14px; border-radius: 20px; margin-bottom: 28px; letter-spacing: 0.5px;
   }
-  .hero h1 { font-size: 52px; font-weight: 600; line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px; }
+  .hero h1 { font-size: 52px; font-weight: 600; line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px; color: var(--text); }
   .hero h1 em { font-style: normal; color: var(--accent); }
   .hero p { font-size: 17px; color: var(--muted); max-width: 580px; margin: 0 auto 40px; line-height: 1.7; }
   .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -74,13 +80,13 @@ const css = `
     flex-wrap: wrap;
   }
   .stat-item { text-align: center; }
-  .stat-num { font-size: 28px; font-weight: 600; }
+  .stat-num { font-size: 28px; font-weight: 600; color: var(--text); }
   .stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
   /* SECTIONS */
   .section { padding: 64px 32px; max-width: 1100px; margin: 0 auto; }
   .section-label { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-  .section h2 { font-size: 32px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .section h2 { font-size: 32px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; color: var(--text); }
   .section > p { color: var(--muted); font-size: 15px; margin-bottom: 36px; }
   .section-divider { border-top: 1px solid var(--border); padding-top: 64px; }
 
@@ -93,7 +99,7 @@ const css = `
   }
   .card:hover { border-color: var(--border2); transform: translateY(-2px); background: var(--surface2); }
   .card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
-  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
   .card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .card-arrow { color: var(--muted); font-size: 18px; float: right; margin-top: -22px; }
 
@@ -101,14 +107,14 @@ const css = `
   .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; display: flex; gap: 16px; }
   .feature-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
-  .feature-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+  .feature-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
   .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
   /* ROLES GRID */
   .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .role-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; text-align: center; }
   .role-icon { font-size: 32px; margin-bottom: 12px; }
-  .role-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .role-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
   .role-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
   .role-badge { display: inline-flex; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 
@@ -140,9 +146,9 @@ const css = `
 
   .doc-content { flex: 1; min-width: 0; padding: 40px 48px 80px; max-width: 800px; }
   .doc-section { margin-bottom: 56px; scroll-margin-top: 80px; }
-  .doc-section h2 { font-size: 26px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.4px; }
+  .doc-section h2 { font-size: 26px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.4px; color: var(--text); }
   .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
-  .doc-section h3 { font-size: 17px; font-weight: 600; margin: 28px 0 12px; }
+  .doc-section h3 { font-size: 17px; font-weight: 600; margin: 28px 0 12px; color: var(--text); }
   .doc-section h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--accent2); }
   .doc-section p { font-size: 14px; color: #b0b8d0; line-height: 1.75; margin-bottom: 12px; }
   .doc-section ul, .doc-section ol { padding-left: 20px; margin-bottom: 12px; }
@@ -184,9 +190,99 @@ const css = `
   .step-content h5 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
   .step-content p { font-size: 13px; color: var(--muted); margin: 0; }
 
+  /* ─── VISUAL GUIDES (diagrams + mockups) ─── */
+  .viz-svg { width: 100%; height: auto; display: block; margin: 18px 0; }
+  .viz-svg text { font-family: 'DM Sans', sans-serif; }
+
+  .viz-frame { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 18px 0; background: var(--surface); }
+  .viz-frame-bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .viz-dot { width: 9px; height: 9px; border-radius: 50%; opacity: 0.7; }
+  .viz-frame-title { margin-left: 8px; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .viz-frame-body { padding: 18px; }
+
+  .viz-pill { display: inline-flex; padding: 2px 9px; border-radius: 20px; font-size: 10.5px; font-weight: 600; line-height: 1.6; }
+  .viz-pill-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .viz-pill-blue { background: rgba(96,165,250,0.15); color: #93c5fd; }
+  .viz-pill-amber { background: rgba(245,166,35,0.15); color: #fcd34d; }
+  .viz-pill-purple { background: rgba(124,92,252,0.15); color: #c4b5fd; }
+  .viz-pill-red { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+  .viz-stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .viz-stat-card { flex: 1; min-width: 100px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .viz-stat-icon { font-size: 16px; margin-bottom: 4px; }
+  .viz-stat-val { font-size: 16px; font-weight: 600; color: var(--text); }
+  .viz-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .viz-chart-row { display: flex; gap: 10px; }
+  .viz-chart-card { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .viz-donut-card { flex: 0 0 110px; display: flex; flex-direction: column; align-items: center; }
+  .viz-chart-title { font-size: 10.5px; color: var(--muted); margin-bottom: 8px; }
+  .viz-mini-svg { width: 100%; height: 64px; }
+  .viz-donut-card .viz-mini-svg { width: 64px; height: 64px; }
+
+  .viz-prop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .viz-prop-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; }
+  .viz-prop-thumb { font-size: 22px; margin-bottom: 6px; }
+  .viz-prop-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .viz-prop-rent { font-size: 10.5px; color: var(--muted); margin: 2px 0 8px; }
+  .viz-prop-add { display: flex; flex-direction: column; align-items: center; justify-content: center; border-style: dashed; color: var(--muted); }
+  .viz-prop-add-icon { font-size: 22px; line-height: 1; }
+  .viz-prop-add-lbl { font-size: 11px; margin-top: 6px; }
+
+  .viz-list { display: flex; flex-direction: column; gap: 8px; }
+  .viz-list-row { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+  .viz-list-main { flex: 1; }
+  .viz-list-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .viz-list-title.small { font-size: 12px; }
+  .viz-list-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .viz-list-sub.small { font-size: 10.5px; }
+  .viz-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(124,92,252,0.18); color: #c4b5fd; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .viz-avatar.small { width: 26px; height: 26px; font-size: 10px; }
+
+  .viz-card-detail { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .viz-card-detail-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .viz-card-detail-note { font-size: 12px; color: var(--muted); margin-top: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 8px 10px; }
+  .viz-card-detail-thumb { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+
+  .viz-msg-layout { display: flex; gap: 10px; height: 100%; }
+  .viz-msg-sidebar { width: 150px; flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; }
+  .viz-msg-convo { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 8px; background: var(--surface2); position: relative; }
+  .viz-msg-convo.active { border: 1px solid var(--accent); background: rgba(124,92,252,0.08); }
+  .viz-unread-dot { position: absolute; top: 6px; right: 6px; background: var(--accent); color: #fff; font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .viz-msg-panel { flex: 1; display: flex; flex-direction: column; gap: 8px; justify-content: flex-end; }
+  .viz-msg-panel.solo { justify-content: center; }
+  .viz-bubble { font-size: 12px; padding: 8px 12px; border-radius: 12px; max-width: 80%; line-height: 1.4; }
+  .viz-bubble.theirs { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; color: var(--text); }
+  .viz-bubble.mine { background: rgba(124,92,252,0.18); align-self: flex-end; color: #e9e3ff; }
+
+  .viz-settings-list { display: flex; flex-direction: column; gap: 8px; }
+  .viz-settings-row { display: flex; justify-content: space-between; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+  .viz-toggle { width: 34px; height: 18px; border-radius: 20px; background: var(--border2); display: inline-flex; align-items: center; padding: 2px; }
+  .viz-toggle.on { background: var(--accent); justify-content: flex-end; }
+  .viz-toggle-knob { width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+
+  .viz-tenant-banner { display: flex; justify-content: space-between; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .viz-tenant-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+  .viz-mini-card { flex: 1; min-width: 110px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 11px; color: var(--muted); text-align: center; }
+  .viz-fake-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 11.5px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
+
+  .viz-form { display: flex; flex-direction: column; gap: 12px; }
+  .viz-form-row-2 { display: flex; gap: 12px; }
+  .viz-form-row-2 > div { flex: 1; }
+  .viz-form-label { font-size: 10.5px; color: var(--muted); display: block; margin-bottom: 5px; }
+  .viz-form-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 12.5px; color: var(--text); }
+  .viz-form-upload { background: var(--surface2); border: 1px dashed var(--border2); border-radius: 8px; padding: 9px 12px; font-size: 12px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 600px) {
+    .viz-chart-row { flex-direction: column; }
+    .viz-donut-card { flex: none; }
+    .viz-msg-layout { flex-direction: column; }
+    .viz-msg-sidebar { width: 100%; flex-direction: row; overflow-x: auto; }
+  }
+
   /* ─── ONBOARDING PAGE ─── */
   .page-hero { background: linear-gradient(180deg, rgba(124,92,252,0.08) 0%, transparent 100%); border-bottom: 1px solid var(--border); padding: 48px 32px 40px; text-align: center; }
-  .page-hero h1 { font-size: 36px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.5px; }
+  .page-hero h1 { font-size: 36px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.5px; color: var(--text); }
   .page-hero p { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto; }
 
   .track-selector { display: flex; justify-content: center; gap: 16px; padding: 32px; flex-wrap: wrap; }
@@ -206,7 +302,7 @@ const css = `
   .phase { margin-bottom: 40px; }
   .phase-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
   .phase-num { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-  .phase-header h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .phase-header h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
   .phase-header p { font-size: 13px; color: var(--muted); margin: 0; }
 
   .step-list { display: flex; flex-direction: column; }
@@ -215,7 +311,7 @@ const css = `
   .step-circle { width: 32px; height: 32px; border-radius: 50%; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
   .step-line { width: 2px; flex: 1; min-height: 20px; margin: 4px 0; }
   .step-right { padding-bottom: 24px; flex: 1; }
-  .step-right h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; padding-top: 4px; }
+  .step-right h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; padding-top: 4px; color: var(--text); }
   .step-right p { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .step-right pre { margin: 10px 0; }
   .step-right .callout { margin: 10px 0; }
@@ -226,21 +322,21 @@ const css = `
   .check-item strong { color: var(--text); }
 
   .completion-card { background: linear-gradient(135deg, rgba(124,92,252,0.12), rgba(96,165,250,0.08)); border: 1px solid rgba(124,92,252,0.3); border-radius: 20px; padding: 40px; text-align: center; margin-top: 32px; }
-  .completion-card h3 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+  .completion-card h3 { font-size: 22px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
   .completion-card p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
   .completion-card-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
   /* ─── SUPPORT PAGE ─── */
   .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
   .support-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
-  .support-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .support-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
   .support-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
   .contact-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; margin-bottom: 8px; }
   .contact-row span { font-size: 13px; color: var(--text); }
   .contact-row .contact-label { font-size: 11px; color: var(--muted); }
 
   .faq-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
-  .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; font-size: 14px; font-weight: 600; background: var(--surface); transition: background 0.15s; }
+  .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; font-size: 14px; font-weight: 600; background: var(--surface); transition: background 0.15s; color: var(--text); }
   .faq-q:hover { background: var(--surface2); }
   .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: all 0.3s; font-size: 13px; color: var(--muted); line-height: 1.7; }
   .faq-a.open { padding: 16px 20px; max-height: 400px; }
@@ -496,6 +592,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-architecture">
           <h2>🏗️ Architecture</h2>
           <div className="section-sub">How RentFlow is built under the hood.</div>
+          <VizArchitecture />
           <table>
             <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
             <tbody>
@@ -531,6 +628,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-roles">
           <h2>👥 User Roles</h2>
           <div className="section-sub">RentFlow has two roles stored in Firestore under <code>users/{"{uid}"}.role</code>.</div>
+          <VizRolesSplit />
           <table>
             <thead><tr><th>Role</th><th>Value</th><th>Access Level</th><th>Portal</th></tr></thead>
             <tbody>
@@ -544,6 +642,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-dashboard">
           <h2>📊 Admin Dashboard</h2>
           <div className="section-sub">The main overview screen for the admin portal at <code>/</code>.</div>
+          <VizDashboard />
           <div className="feature-list">
             <FRow icon="💰" title="Total Revenue" desc={<>Sum of all payments with status <code>paid</code> or <code>confirmed</code>.</>} />
             <FRow icon="✅" title="Paid Payments" desc="Count of confirmed/paid payment records." />
@@ -559,6 +658,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-properties">
           <h2>🏘️ Properties</h2>
           <div className="section-sub">Manage all property units at <code>/properties</code>.</div>
+          <VizProperties />
           <h3>Adding a Property</h3>
           <div className="steps">
             <Step n={1} title='Click "Add Property"'><p>Opens a modal form on the right side of the page.</p></Step>
@@ -582,6 +682,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-tenants-admin">
           <h2>👥 Tenants (Admin)</h2>
           <div className="section-sub">View all tenants at <code>/tenants</code>.</div>
+          <VizTenantsAdmin />
           <p>The Tenants page shows all tenants pulled from the <code>properties</code> collection — specifically, properties that have a <code>tenant</code> field set. Each card shows the tenant name, property unit, and the unit's current status.</p>
           <Callout type="info"><strong>💡 Tenant accounts vs assignments</strong> — A tenant "account" (in <code>users</code> collection) and a tenant "assignment" (the <code>tenant</code> field on a property) are separate. Tenants sign up independently and you assign their name to a property manually.</Callout>
           <h3>Searching Tenants</h3>
@@ -591,6 +692,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-payments-admin">
           <h2>💳 Payments (Admin)</h2>
           <div className="section-sub">Full payment management at <code>/payments</code>.</div>
+          <VizPaymentFlow />
           <h3>Payment Statuses</h3>
           <table>
             <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
@@ -612,6 +714,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-maintenance-admin">
           <h2>🔧 Maintenance (Admin)</h2>
           <div className="section-sub">Manage all tenant requests at <code>/maintenance</code>.</div>
+          <VizMaintenanceAdmin />
           <p>Requests are displayed in a card grid. Filter by status using the pill buttons at the top, or search by title, tenant email, or category.</p>
           <h3>Request Card Actions</h3>
           <div className="feature-list">
@@ -625,6 +728,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-announcements">
           <h2>📢 Announcements</h2>
           <div className="section-sub">Post system-wide announcements at <code>/announcements</code>.</div>
+          <VizAnnouncements />
           <p>Announcements are visible to all tenants on their dashboard. Fill in a title, message body, and select the type:</p>
           <table>
             <thead><tr><th>Type</th><th>Icon</th><th>Use Case</th></tr></thead>
@@ -641,6 +745,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-messages-admin">
           <h2>💬 Messages (Admin)</h2>
           <div className="section-sub">Private tenant messaging at <code>/messages</code>.</div>
+          <VizMessagesAdmin />
           <p>The Messages page has a two-panel layout: a sidebar listing all tenant conversations, and a chat panel on the right. On mobile, these views switch between each other.</p>
           <h3>Unread Counts</h3>
           <p>Each conversation shows an unread count badge. The total unread count is also shown in the sidebar nav badge. Reading a conversation marks all messages in it as read for the admin.</p>
@@ -651,6 +756,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-settings">
           <h2>⚙️ Settings</h2>
           <div className="section-sub">System configuration at <code>/settings</code>.</div>
+          <VizSettings />
           <h3>Payment Accounts</h3>
           <p>Configure the payment details shown to tenants when they pay rent online. Supported methods:</p>
           <ul>
@@ -668,6 +774,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-tenant-dashboard">
           <h2>🏠 Tenant Dashboard</h2>
           <div className="section-sub">The tenant's home screen at <code>/tenant</code>.</div>
+          <VizTenantDashboard />
           <p>The tenant dashboard shows a personalized overview of their rental situation. It loads data specific to the logged-in tenant based on their <code>uid</code>.</p>
           <div className="feature-list">
             <FRow icon="🏠" title="Property Banner" desc="Shows the assigned property name, rent amount, and current status." />
@@ -681,6 +788,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-pay-rent">
           <h2>💸 Pay Rent (Tenant)</h2>
           <div className="section-sub">Online rent submission at <code>/tenant/pay-rent</code>.</div>
+          <VizPayRentFlow />
           <div className="steps">
             <Step n={1} title="Select payment method"><p>Choose from GCash, Maya, BDO, BPI, Metrobank, UnionBank, or PNB.</p></Step>
             <Step n={2} title="View payment details"><p>The configured account number/name set by the admin is displayed.</p></Step>
@@ -695,6 +803,7 @@ function DocsPage() {
         <div className="doc-section" id="doc-tenant-maintenance">
           <h2>🔧 Maintenance (Tenant)</h2>
           <div className="section-sub">Submit and track requests at <code>/tenant/maintenance</code>.</div>
+          <VizTenantMaintenance />
           <p>Tenants can submit maintenance requests for issues in their unit. Each request includes:</p>
           <ul>
             <li><strong>Title</strong> — short description of the issue</li>
@@ -709,12 +818,14 @@ function DocsPage() {
         <div className="doc-section" id="doc-tenant-messages">
           <h2>💬 Messages (Tenant)</h2>
           <div className="section-sub">Private chat with the admin at <code>/tenant/messages</code>.</div>
+          <VizTenantMessages />
           <p>Tenants have a private message thread with the landlord/admin. Messages are stored in Firestore and sync in real time. Press <strong>Enter</strong> to send, <strong>Shift+Enter</strong> for a new line. Maximum message length is 2,000 characters.</p>
         </div>
 
         <div className="doc-section" id="doc-tenant-profile">
           <h2>👤 Tenant Profile</h2>
           <div className="section-sub">Personal info and account security at <code>/tenant/profile</code>.</div>
+          <VizTenantProfile />
           <p>Tenants can update their personal details, emergency contact, and government ID info. The profile section also includes a password change form with real-time strength indicator.</p>
           <Callout type="info"><strong>🔐 Password changes</strong> require the tenant to enter their current password first (re-authentication). Email address cannot be changed from the profile page.</Callout>
         </div>
@@ -863,6 +974,7 @@ function OnboardingPage({ setPage }) {
         {track === "landlord" && (
           <div>
             <Callout type="tip"><strong>✅ You're the admin.</strong> This guide walks you through the first-time setup of RentFlow — from logging in to having your first tenant paying rent through the system.</Callout>
+            <VizOnboardLandlord />
 
             {[
               {n:1, color:"rgba(124,92,252,0.15)", textColor:"#c4b5fd", border:"rgba(124,92,252,0.3)", circleStyle:{background:"rgba(124,92,252,0.15)",color:"#c4b5fd",borderColor:"rgba(124,92,252,0.4)"}, lineStyle:{background:"rgba(124,92,252,0.15)"},
@@ -944,6 +1056,7 @@ function OnboardingPage({ setPage }) {
         {track === "tenant" && (
           <div>
             <Callout type="tip"><strong>👋 Welcome!</strong> This guide is for tenants. Your landlord should have already given you the app link. Here's how to get started.</Callout>
+            <VizOnboardTenant />
             {[
               {n:1,color:"rgba(16,185,129,0.15)",textColor:"#6ee7b7",border:"rgba(16,185,129,0.3)",title:"Create Your Account",sub:"One-time setup — takes about 2 minutes.",
                 steps:[
@@ -1037,6 +1150,7 @@ function OnboardingPage({ setPage }) {
         {track === "developer" && (
           <div>
             <Callout type="info"><strong>⚙️ Developer setup guide</strong> — This covers everything from cloning the repo to deploying a live instance for your client.</Callout>
+            <VizOnboardDeveloper />
 
             <div className="phase">
               <div className="phase-header">
